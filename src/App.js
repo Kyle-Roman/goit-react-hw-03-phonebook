@@ -11,12 +11,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      contacts: [
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-        { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-        { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-      ],
+      contacts: [],
       filter: '',
     };
   }
@@ -24,7 +19,7 @@ class App extends Component {
   componentDidMount() {
     const contacts = JSON.parse(localStorage.getItem("contacts"));
 
-    this.setState({contacts: contacts || {}})
+    this.setState({contacts: contacts || [] })
   };
 
   componentDidUpdate() {
@@ -44,12 +39,12 @@ class App extends Component {
     }
     return (this.state.contacts.find(contact => contact.name === contactsData.name))
       ? alert(`Контакт ${contactsData.name} уже существует!`)
-      : this.setState(({contacts}) => ({contacts: [contact, ...contacts]})     
+      : this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] })
       )
   }
   
   handleFilterChange = e => {
-        this.setState({filter: e.currentTarget.value})
+    this.setState({ filter: e.currentTarget.value })
   }
 
   deleteContact = (contactId) => {
@@ -58,7 +53,7 @@ class App extends Component {
     }))
   }
   
-  render() {
+render() {
     const {  filter } = this.state;
     const normalizedFilter = this.state.filter.toLowerCase();
     const filteredContacts = this.state.contacts.filter((contact) =>
@@ -67,15 +62,15 @@ class App extends Component {
     return (
       <div className={s.app}>
         <h1 className={s.title}>Phonebook</h1>
-        <Form onSubmit={this.onFormSubmit} />
+        <Form onSubmit={this.onFormSubmit} contacts={this.state.contacts} />
         <h2 className={s.title}>Contacts</h2>
         <Filter value={filter} onChange={ this.handleFilterChange}/>
         <Contacts contacts={filteredContacts} onDelete={this.deleteContact}/>
       </div>)
     
   };
-
 }
+
 
 export default App;
 
